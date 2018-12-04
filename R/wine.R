@@ -23,6 +23,7 @@
 #' @author Bart Roes
 #' @author Luisa Pricken
 #' @author Ameni Rouatbi
+#' @importFrom magrittr %>%
 #' @export
 #' @examples
 #' data = data("winemag")
