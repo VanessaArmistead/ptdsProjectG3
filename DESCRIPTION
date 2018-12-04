@@ -18,7 +18,7 @@ License: GNU AFFERO GENERAL PUBLIC LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.4.3)
-Imports: 
+Imports:
     tidyverse (>= 1.2.1),
     geojsonio (>= 0.6.0)
 RoxygenNote: 6.1.1
