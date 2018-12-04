@@ -23,15 +23,12 @@
 #' @author Bart Roes
 #' @author Luisa Pricken
 #' @author Ameni Rouatbi
-#' @importFrom tidyverse, select
-#' @importFrom tidyverse, filter
-#' @importFrom tidyverse, arrange
-#' @importFrom tidyverse, rename
-#' @importFrom tidyverse, mutate
+#' @importFrom dplyr select filter arrange rename mutate
 #' @export
 #' @examples
 #' data = data("winemag")
 #' get_wine(data, Country = "Italy")
+
 get_wine<- function(Data, Country = NULL,Price= NULL, Variety= NULL,
                     Province = NULL, N=10, Criteria = NULL) {
   cleantable <- data[,c("title","points", "price" ,"country",
