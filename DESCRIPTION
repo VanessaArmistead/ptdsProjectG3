@@ -17,5 +17,8 @@ Description: This package allows you to retrieve the best wine accross the
 License: GNU AFFERO GENERAL PUBLIC LICENSE
 Encoding: UTF-8
 LazyData: true
-Depends: R(>= 3.4.3)
-Imports:
+Depends: R (>= 3.4.3)
+Imports: 
+    tidyverse (>= 1.2.1), 
+    geojsonio (>= 0.6.0)
+    
