@@ -1,11 +1,21 @@
 Package: ptdsProjectG3
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Wine Review
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: c(
+    person("Vanessa", "Armistead", email = "vanessa.armistead@unil.ch",
+    role = c("aut","cre")),
+    person("Bart", "Roes", email = "bart.roes@unil.ch", role = "aut"),
+    person("Ameni", "Rouatbi", email = "ameni.rouatbi@unil.ch", role = "aut"),
+    person("Luisa", "Pricken", email = "luisa.prickenbrandao@unil.ch",
+    role = "aut")
+    )
+Maintainer: The package maintainer <bart.roes@unil.ch>
+Description: This package allows you to retrieve the best wine accross the 
+    World. The data used is from the website WineEnthusiast.com (downloaded
+    from Kaggle).
+License: GNU AFFERO GENERAL PUBLIC LICENSE
 Encoding: UTF-8
 LazyData: true
+Depends: R(>= 3.4.3)
+Imports:

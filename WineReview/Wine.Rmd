@@ -1,0 +1,110 @@
+---
+title: "Wine Review Project"
+author: "Armistead, Vanessa; Pricken, Luisa; Roes, Bart; Rouatbi Ameni"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document:
+    theme: cerulean
+    highlight: tango 
+bibliography: Bibliography.bib
+---
+## Introduction 
+
+## Data Cleaning
+
+
+```{r setup}
+#install.packages("geojsonio")
+#install.packages("classInt")
+
+library("leaflet")
+library("geojsonio")
+library("readr")
+library("data.table")
+library("purrr")
+library("geonames")
+library("tidyverse")
+
+```
+
+
+```{r}
+countries <- geojson_read("Data/countries.geojson", what = "sp")
+class(countries)
+names(countries)
+#countries$ADMIN
+
+```
+
+
+Establishing connection
+
+```{r}
+m <- leaflet(countries) %>%
+  setView(0, 0, 2) %>%
+  addProviderTiles("MapBox", options = providerTileOptions(
+    id = "mapbox.light",
+    accessToken = Sys.getenv('pk.eyJ1IjoiYmFydGozaCIsImEiOiJjam81amF6ODcwODBqM3FvYTlrN2E3azlvIn0.PUtXU40gLYiECsGAMzeYiw')))
+
+```
+
+The data
+```{r}
+data <- read_csv("Data/winemag-data-130k-v2.csv")
+
+data <- data %>%
+  filter(is.na(country) == FALSE)
+  
+data[which(data$country == "US"),]$country = "United States of America"
+data[which(data$country == "England"),]$country = "United Kingdom"
+
+avg.quality <- data %>%
+  group_by(country) %>%
+  summarise(avg.quality = mean(points))
+```
+
+
+The colouring
+```{r}
+df <- matrix(nrow = 255,ncol = 1, 0)
+df <- as.data.frame(df)
+
+df[,1] <- unique(countries$ADMIN)
+colnames(df) <- c("country")
+df$country <- as.character(df$country)
+
+df <- df %>% left_join(avg.quality, by = c("country" = "country"))
+
+countries@data$quality <- df
+
+bins <- c(84,85,86,87,88,89,90,91)
+pal <- colorBin("YlOrRd", domain = countries$df,
+                bins = bins)
+
+labels <- sprintf(
+     "<strong>%s</strong><br/>%g",
+     df$country, df$avg.quality) %>% 
+  lapply(htmltools::HTML)
+
+m %>% addPolygons(
+  fillColor = ~pal(df$avg.quality),
+  weight = 2,
+  opacity = 1,
+  color = "white",
+  dashArray = "3",
+  fillOpacity = 0.7,
+  highlight = highlightOptions(
+    weight = 5,
+    color = "#666",
+    dashArray = "",
+    fillOpacity = 0.7,
+    bringToFront = TRUE),
+  label = labels,
+  labelOptions = labelOptions(
+    style = list("font-weight" = "normal", padding = "3px 8px"),
+    textsize = "15px",
+    direction = "auto")) %>%
+  addLegend(pal = pal, values = ~density, opacity = 0.7, title = "Average wine quality",
+  position = "bottomleft")
+
+```
