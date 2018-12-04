@@ -31,7 +31,7 @@
 
 get_wine<- function(Data, Country = NULL,Price= NULL, Variety= NULL,
                     Province = NULL, N=10, Criteria = NULL) {
-  cleantable <- data[,c("title","points", "price" ,"country",
+  cleantable <- Data[,c("title","points", "price" ,"country",
                         "province", "variety", "winery")] %>%
     filter(is.na(points) == FALSE,
            is.na(price) == FALSE,
