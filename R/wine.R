@@ -23,7 +23,6 @@
 #' @author Bart Roes
 #' @author Luisa Pricken
 #' @author Ameni Rouatbi
-#' @importFrom dplyr select filter arrange rename mutate
 #' @export
 #' @examples
 #' data = data("winemag")
@@ -33,10 +32,12 @@ get_wine<- function(Data, Country = NULL,Price= NULL, Variety= NULL,
                     Province = NULL, N=10, Criteria = NULL) {
   cleantable <- Data[,c("title","points", "price" ,"country",
                         "province", "variety", "winery")] %>%
-    filter(is.na(points) == FALSE,
+    dplyr::filter(is.na(points) == FALSE,
            is.na(price) == FALSE,
-           is.na(title) == FALSE)  %>%
-    rename('quality' = `points`)
+           is.na(title) == FALSE,
+           is.na(country) == FALSE,
+           is.na(variety) == FALSE)  %>%
+    dplyr::rename('quality' = `points`)
 
   if(is.null(Price) == TRUE){
     cleantable <- cleantable
@@ -47,52 +48,52 @@ get_wine<- function(Data, Country = NULL,Price= NULL, Variety= NULL,
 
   if(is.null(Country) == TRUE) {
     cleantable <- cleantable
-  } else if(sum(country %in% Country) == 0) {
-    warning("There are no wine from this country")
+  } else if(sum(cleantable$country %in% Country) == 0) {
+    warning("There are no wines from this country")
   } else {
     cleantable <- cleantable %>%
-      filter(country %in% Country)
+      dplyr::filter(country %in% Country)
   }
 
   if(is.null(Province) == TRUE) {
     cleantable <- cleantable
-  } else if(sum(province %in% Province) == 0) {
-    warning("There are no wine from this province")
+  } else if(sum(cleantable$province %in% Province) == 0) {
+    warning("There are no wines from this province")
   } else {
     cleantable <- cleantable %>%
-      filter(province %in% Province)
+      dplyr::filter(province %in% Province)
   }
 
   if(is.null(Variety) == TRUE) {
     cleantable <- cleantable
-  } else if(sum(variety %in% Variety) == 0) {
-    warning("There are no wine from this variety")
+  } else if(sum(cleantable$variety %in% Variety) == 0) {
+    warning("There are no wines from this variety")
   } else {
     cleantable <- cleantable %>%
-      filter(variety %in% Variety)
+      dplyr::filter(variety %in% Variety)
   }
 
   if(is.null(Criteria) == TRUE) {
     cleantable <- cleantable
   } else if (Criteria== "price") {
     cleantable <- cleantable %>%
-      arrange(-price)
+      dplyr::arrange(-price)
   } else if (Criteria== "ascending price") {
     cleantable <- cleantable %>%
-      arrange(price)
+      dplyr::arrange(price)
   } else if (Criteria == "quality") {
     cleantable <- cleantable %>%
-      arrange(-quality)
+      dplyr::arrange(-quality)
   } else if (Criteria == "price & quality") {
     cleantable <- cleantable %>%
-      arrange(-price, -quality)
+      dplyr::arrange(-price, -quality)
   } else if (Criteria == "ascending price & quality") {
     cleantable <- cleantable %>%
-      arrange(price, -quality)
+      dplyr::arrange(price, -quality)
   } else if (Criteria == "quality/price") {
     cleantable <- cleantable %>%
-      mutate(ratio= quality/price) %>%
-      arrange(-ratio)
+      dplyr::mutate(ratio= quality/price) %>%
+      dplyr::arrange(-ratio)
   } else {
     stop("Criteria is incorrectly specified")
   }
@@ -101,7 +102,7 @@ get_wine<- function(Data, Country = NULL,Price= NULL, Variety= NULL,
     stop("N should be a positive number")
   } else if (N %% 1 != 0){
     stop("N should be an integer")
-  } else if(N>=nrow(cleantable)){
+  } else if(N >= nrow(cleantable)){
     return(cleantable)
   } else {
     warning("There are more wines that the number specified")

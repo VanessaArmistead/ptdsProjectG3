@@ -20,5 +20,6 @@ LazyData: true
 Depends: R (>= 3.4.3)
 Imports:
     tidyverse (>= 1.2.1),
-    geojsonio (>= 0.6.0)
+    geojsonio (>= 0.6.0),
+    dplyr (>= 0.7.6)
 RoxygenNote: 6.1.1
