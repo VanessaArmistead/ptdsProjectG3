@@ -66,21 +66,24 @@ Taster Twitter Handle. Moreover, we deleted the rows containing missing
 information about the price, the region 1 and the number of points. We aslo 
 added a column "Year" which extracts information of the year from the "Title" 
 variable. 
-```{r cleaning, eval=FALSE}
+```{r cleaning, eval=FALSE, echo=FALSE}
 # Download data
 winemag <- read_csv("/Users/Vanessa/Desktop/winemag-data-130k-v2.csv")
 
 # Take out unnecessary columns
 winemag <- winemag[,-c(1,10,11)]
 
-### Take out rows for wine without the price
+# Take out rows for wine without the price
 winemag <- winemag[complete.cases(winemag[,5]),]
 
-### Take out rows for wine without the region 1
-winemag <- winemag[complete.cases(winemag[,7]),]
-
-### Take out rows for wine without the points 
+# Take out rows for wine without the points 
 winemag <- winemag[complete.cases(winemag[,4]),]
+
+# Take out rows for wine without the country 
+winemag <- winemag[complete.cases(winemag[,1]),]
+
+# Take out rows for wine without the variety 
+winemag <- winemag[complete.cases(winemag[,10]),]
 
 # From the variable "title", take out the year & create a new variable "Year"
 strsplit(winemag$title, "20")
@@ -93,6 +96,9 @@ extract <- function(string){
 winemag <- winemag %>% 
   mutate(year = extract(title))
 
+# Change country names to match the second dataset (countries)
+data[which(data$country == "US"),]$country = "United States of America"
+data[which(data$country == "England"),]$country = "United Kingdom"
 ```
 This new database thus contains 12 variables and 101400 observations.
 
@@ -103,16 +109,124 @@ usethis::use_data(winemag, overwrite = TRUE)
 ```
 
 
-#### Country Dataset
+#### Countries Dataset
+
+To get the information about the coordinates of the countries in the World in
+order to create our map, we used the geocountries function from the Geodata data
+package. 
+
+```{r countries, eval=FALSE}
+# Data from Geodata package
+countries <- geojson_read("/Users/Vanessa/Desktop/countries.geojson", what = "sp")
+```
 
 
-```{r}
+#### Countries and Wine reviews databases 
+Create labels and color of the map 
+```{r, warning=FALSE}
+# Load the necessary data
+load("../data/winemag.rda")
+data <- winemag
+load("../data/countries.rda")
 
+
+# Calculate average wine quality per country
+avg.quality <- data %>%
+  group_by(country) %>%
+  summarise(avg.quality = mean(points))
+
+# Initialize matrix for label creation
+df <- matrix(nrow = 255, ncol = 1, 0)
+df <- as.data.frame(df)
+
+df[,1] <- unique(countries$ADMIN)
+colnames(df) <- c("country")
+df$country <- as.character(df$country)
+
+df <- df %>% left_join(avg.quality, by = c("country" = "country"))
+
+# Find the number of unique countries/varieties that are present in the wine data
+unique.countries <- unique(data$country)
+unique.varieties <- unique(data$variety)
+
+# Create a label based on the mots popular wine
+common_wines <- data %>%
+    group_by(country, variety) %>%
+    count()
+
+wine.labels <- matrix(nrow = 42, ncol = 3)
+wine.labels <- as.data.frame(wine.labels)
+for(i in 1:42){
+    a <- common_wines %>%
+        filter(country == unique.countries[i]) 
+    if (is.na(a) == FALSE) {
+    wine.labels[i,] <- a[which.max(a$n),]
+    }
+}
+wine.labels <- wine.labels[-43,]
+
+df <- df %>% 
+    left_join(wine.labels, by = c("country" = "V1"))
+
+n.wines <- data %>%
+    group_by(country) %>%
+    count()
+
+df <- df %>% left_join(n.wines, by = c("country" = "country"))
+
+countries@data$quality<- df
+
+labels <- sprintf(
+  "<strong>%s</strong><br/>%g",
+  countries@data$quality$country, signif(countries@data$quality$avg.quality, digits = 3)) %>% 
+  lapply(htmltools::HTML)
+
+wine.label <- sprintf(
+    "<strong>%s</strong><br/>%s",
+    countries@data$quality$country, countries@data$quality$V2) %>% 
+    lapply(htmltools::HTML)
+
+# Adding label for the number of wines
+
+number.label <- sprintf(
+    "<strong>%s</strong><br/>%g",
+    countries@data$quality$country, countries@data$quality$n) %>% 
+    lapply(htmltools::HTML)
+
+grouped.labels <- list(labels, wine.label, number.label)
+
+# Creating colours for the graph
+# Based on avg quality
+bins <- c()
+for (i in 1:5) {
+    bins[i] <- quantile(countries@data$quality$avg.quality, na.rm = T, probs = 0.2*i)
+}
+bins.avg <- c(80,round(bins,1),93)
+pal.avg <- colorBin("YlOrRd", domain = countries$df,
+                bins = bins.avg)
+# Based on number of wines 
+bins <- c()
+for (i in 1:5) {
+    bins[i] <- quantile(countries@data$quality$n, na.rm = T, probs = 0.2*i)
+}
+bins.n <- c(0, bins, 60000)
+pal.n <- colorBin("YlOrRd", domain = countries$df,
+                bins = bins.n)
+
+pal.fun <- list(pal.avg,
+                pal.avg,
+                pal.n)
+pal <- list(pal.avg(countries@data$quality$avg.quality), 
+            pal.avg(countries@data$quality$avg.quality), 
+            pal.n(countries@data$quality$n))
+pal.name <- c(rep("Average wine quality",2),"Amount of wines")
+
+usethis::use_data(countries, overwrite = TRUE)
 ```
 
 
 
-## 
+## Example of Basic World Map (Not interactive)
 
 ```{r}
 countries <- geojson_read("data/countries.geojson", what = "sp")
@@ -134,8 +248,6 @@ m <- leaflet(countries) %>%
 
 The data
 ```{r}
-data <- read_csv("Data/winemag-data-130k-v2.csv")
-
 data <- data %>%
   filter(is.na(country) == FALSE)
 
