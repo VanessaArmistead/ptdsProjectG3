@@ -8,15 +8,9 @@ output:
     highlight: tango 
 bibliography: Bibliography.bib
 ---
-## Introduction 
-
-## Data Cleaning
-
 
 ```{r setup}
-#install.packages("geojsonio")
-#install.packages("classInt")
-
+# This is the chunck indicates all of the different packages used in our project
 library("leaflet")
 library("geojsonio")
 library("readr")
@@ -24,16 +18,107 @@ library("data.table")
 library("purrr")
 library("geonames")
 library("tidyverse")
+```
+
+## Introduction 
+We decided to work on a wine data review that was available on kaggle. This 
+dataset contains information that can be found on the website
+"Wine Enthousiast". We created an interactive map that is easy to navigate
+through the different countries of the World. Indeed, one is able to see the
+best wine of each country. One can change the variety of the wine to see which 
+country of the World has the best wine of this specific variety. 
+
+## Data Cleaning
+
+#### Wine Review Dataset
+The original dataset from kaggle contained 14 variables including: 
+- X: this integer variable indicates the observation number
+- Country: this variable shows from which country the wine comes from. It is 
+of type character 
+- Description: this variable of type character gives us information about the 
+wine
+- Designation: it indicates the vineyard of the winery. It is of type character
+- Points: this interger variable contains the number of points that was given 
+to the specific wine. The scale is between 1 and 100 where 100 indicates a good
+wine
+- Price: it indicates the cost of the different bottles of wine which is in 
+US$. It is a numerical variable
+- Province: this character variable shows from which province/state the wine
+is from
+- Region 1: it indicates the area of where the wine is from. It is of type
+character
+- Region 2: this character variables adds information about the region of the
+wine
+- Taster Name: character variable indicating the name of the taster of the wine
+that posted the review on the website Wine Enthousiast
+- Taster Twitter Handle: this character variables includes information about 
+the Twitter account of the taster of the wine
+- Title: it is a character variable that contains information about the wine 
+such as the type of wine and the year of the wine
+- Variety: this character variable indicates the grapes used for the wine for
+instance "Pinot Gris"
+- Winery: it is a character variable indicating which winery produced the wine
+
+This dataset contains 129971 observations.
+
+We then deleted the unnecessary variables, i.e. the X, the Taster Name, and the 
+Taster Twitter Handle. Moreover, we deleted the rows containing missing
+information about the price, the region 1 and the number of points. We aslo 
+added a column "Year" which extracts information of the year from the "Title" 
+variable. 
+```{r cleaning, eval=FALSE}
+# Download data
+winemag <- read_csv("/Users/Vanessa/Desktop/winemag-data-130k-v2.csv")
+
+# Take out unnecessary columns
+winemag <- winemag[,-c(1,10,11)]
+
+### Take out rows for wine without the price
+winemag <- winemag[complete.cases(winemag[,5]),]
+
+### Take out rows for wine without the region 1
+winemag <- winemag[complete.cases(winemag[,7]),]
+
+### Take out rows for wine without the points 
+winemag <- winemag[complete.cases(winemag[,4]),]
+
+# From the variable "title", take out the year & create a new variable "Year"
+strsplit(winemag$title, "20")
+str_detect(winemag$title, "20%")
+library(stringr)
+extract <- function(string){
+  str_extract(string, "\\-*\\d+\\.*\\d*")
+}
+
+winemag <- winemag %>% 
+  mutate(year = extract(title))
+
+```
+This new database thus contains 12 variables and 101400 observations.
+
+We then changed the format of the database into a RDA file so that people
+could easily retrieve it when using our package. 
+```{r RDA, eval=FALSE}
+usethis::use_data(winemag, overwrite = TRUE)
+```
+
+
+#### Country Dataset
+
+
+```{r}
 
 ```
 
 
+
+## 
+
 ```{r}
-countries <- geojson_read("Data/countries.geojson", what = "sp")
+countries <- geojson_read("data/countries.geojson", what = "sp")
 class(countries)
 names(countries)
 #countries$ADMIN
-
 ```
 
 
@@ -45,7 +130,6 @@ m <- leaflet(countries) %>%
   addProviderTiles("MapBox", options = providerTileOptions(
     id = "mapbox.light",
     accessToken = Sys.getenv('pk.eyJ1IjoiYmFydGozaCIsImEiOiJjam81amF6ODcwODBqM3FvYTlrN2E3azlvIn0.PUtXU40gLYiECsGAMzeYiw')))
-
 ```
 
 The data
@@ -54,7 +138,7 @@ data <- read_csv("Data/winemag-data-130k-v2.csv")
 
 data <- data %>%
   filter(is.na(country) == FALSE)
-  
+
 data[which(data$country == "US"),]$country = "United States of America"
 data[which(data$country == "England"),]$country = "United Kingdom"
 
@@ -82,8 +166,8 @@ pal <- colorBin("YlOrRd", domain = countries$df,
                 bins = bins)
 
 labels <- sprintf(
-     "<strong>%s</strong><br/>%g",
-     df$country, df$avg.quality) %>% 
+  "<strong>%s</strong><br/>%g",
+  df$country, df$avg.quality) %>% 
   lapply(htmltools::HTML)
 
 m %>% addPolygons(
@@ -105,6 +189,5 @@ m %>% addPolygons(
     textsize = "15px",
     direction = "auto")) %>%
   addLegend(pal = pal, values = ~density, opacity = 0.7, title = "Average wine quality",
-  position = "bottomleft")
-
+            position = "bottomleft")
 ```
