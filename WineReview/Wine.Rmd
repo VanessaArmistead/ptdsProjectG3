@@ -85,20 +85,9 @@ winemag <- winemag[complete.cases(winemag[,1]),]
 # Take out rows for wine without the variety 
 winemag <- winemag[complete.cases(winemag[,10]),]
 
-# From the variable "title", take out the year & create a new variable "Year"
-strsplit(winemag$title, "20")
-str_detect(winemag$title, "20%")
-library(stringr)
-extract <- function(string){
-  str_extract(string, "\\-*\\d+\\.*\\d*")
-}
-
-winemag <- winemag %>% 
-  mutate(year = extract(title))
-
 # Change country names to match the second dataset (countries)
-data[which(data$country == "US"),]$country = "United States of America"
-data[which(data$country == "England"),]$country = "United Kingdom"
+winemag[which(winemag$country == "US"),]$country = "United States of America"
+winemag[which(winemag$country == "England"),]$country = "United Kingdom"
 ```
 This new database thus contains 12 variables and 101400 observations.
 

@@ -5,6 +5,7 @@ library("purrr")
 library("geonames")
 library("tidyverse")
 library("ptdsProjectG3")
+library("kableExtra")
 
 
 # Define server logic
@@ -12,7 +13,7 @@ server <- function(input, output, session) {
 
   labels <- sprintf(
     "<strong>%s</strong><br/>%g",
-    countries@data$quality$country, signif(countries@data$quality$quality, digits = 3)) %>%
+    countries@data$quality$country, signif(countries@data$quality$avg.quality, digits = 3)) %>%
     lapply(htmltools::HTML)
 
   wine.label <- sprintf(
@@ -119,38 +120,10 @@ server <- function(input, output, session) {
       addMiniMap(position = "bottomleft")
   })
 
-  # When clicking, zooms to a specific point
-  # observe({
-  #     click <- input$mymap_shape_click
-  #     if(is.null(click))
-  #         return()
-  #     else
-  #         leafletProxy("mymap") %>%
-  #         setView(lng = click$lng, lat = click$lat, zoom = 3)
-  # })
-
-  # Updates the price-quality graph to display results per selected country
-
   observeEvent(input$mymap_shape_click, {
     x <- input$mymap_shape_click
     updateSelectInput(session, "click.country", selected=x$id)
   })
-
-  # The province observation does not work yet...
-  # observe({
-  #   province <- if (is.null(input$country)){
-  #       return(character(0)) } else {
-  #           provinces <- as.data.frame(filter(data, country %in% input$country)) %>%
-  #           select(province) %>%
-  #           unique() %>%
-  #           sort()
-  #           return(provinces)
-  #   }
-  # })
-  #   stillSelected <- isolate(input$province[input$province %in% provinces])
-  #   updateSelectInput(session, "provinces", choices = provinces,
-  #                     selected = stillSelected)
-  # })
 
   output$winetable <- DT::renderDataTable({
 
@@ -170,5 +143,11 @@ server <- function(input, output, session) {
     DT::datatable(cleantable, escape = FALSE)
   })
 
-
+  output$best_wine <- function(){
+       get_wine(Country=input$click.country,
+               Variety = input$variety,
+                Data=winemag,
+                N=5) %>% select(title) %>% kable(col.names=c(" ")) %>%
+                    kable_styling(bootstrap_options = "striped", font_size=12)
+  }
 }

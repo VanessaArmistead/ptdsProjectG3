@@ -21,11 +21,9 @@ ui <- fluidPage(
 
                                         h2("Wine data explorer"),
 
-                                        selectInput("label", "Label",
-                                                    c("Average quality",
-                                                      "Most common wine",
-                                                      "Amount of wines"),
-                                                    multiple=FALSE),
+                                        h4("Quality/Price Analysis"),
+
+                                        plotOutput("PriceQuality", height = 250),
 
                                         selectInput("variety",
                                                     "Variety",
@@ -33,13 +31,35 @@ ui <- fluidPage(
                                                       sort(unique(winemag$variety))),
                                                     multiple=TRUE),
 
-                                        plotOutput("PriceQuality", height = 250),
                                         selectInput("click.country",
                                                     "Graph displayed for: ",
                                                     c("All countries" = "",
                                                       sort(unique(winemag$country))),
-                                                    selected = "")
+                                                    selected = ""),
+
+                                        h4("Table of Top 5 Wines"),
+
+                                        tableOutput("best_wine")
                           ),
+
+                          absolutePanel(id = "controls",
+                                           class = "panel panel-default",
+                                           fixed = TRUE,
+                                           draggable = TRUE, top = 60, left = 20,
+                                           right = "auto", bottom = "auto",
+                                           width = 330, height = "auto",
+
+                                           h2("Map Information"),
+
+                                           selectInput("label", "Label",
+                                                       c("Average quality",
+                                                         "Most common wine",
+                                                         "Amount of wines"),
+                                                       multiple=FALSE)
+
+
+                          ),
+
 
                           tags$div(id="cite",
                                    'Data compiled from ', tags$em('WineEnthusiast'),
@@ -63,15 +83,6 @@ ui <- fluidPage(
                                            c("All countries"="",
                                              sort(unique.countries)),
                                            multiple=TRUE)
-                        ),
-                        column(3,
-                               conditionalPanel("input.country",
-                                                selectInput("province",
-                                                            "Provinces",
-                                                            c("All provinces"=""),
-                                                            multiple=TRUE)
-                               )
-
                         )
                       ),
                       fluidRow(
