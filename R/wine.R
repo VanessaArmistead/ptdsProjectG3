@@ -26,10 +26,10 @@
 #' @importFrom magrittr %>%
 #' @export
 #' @examples
-#' data = data("winemag")
-#' get_wine(data, Country = "Italy")
+#' get_wine())
+#' get_wine(Country = "Italy")
 
-get_wine<- function(Data, Country = NULL,Price= NULL, Variety= NULL,
+get_wine<- function(Data = winemag, Country = NULL,Price= NULL, Variety= NULL,
                     Province = NULL, N=10, Criteria = NULL) {
   cleantable <- Data[,c("title","points", "price" ,"country",
                         "province", "variety", "winery")] %>%
