@@ -250,12 +250,12 @@ compile_partial_data <- function(all.countries){
 
 }
 
-#code to get the important countries:
-cntrs <- ((ptdsProjectG3::winemag %>% dplyr::group_by(country)
-  %>% dplyr::count() %>% dplyr::filter(n > 50))$country %>% as.character())[-1]
-
-#test function
-compile_partial_data(cntrs)
+# #code to get the important countries:
+# cntrs <- ((ptdsProjectG3::winemag %>% dplyr::group_by(country)
+#   %>% dplyr::count() %>% dplyr::filter(n > 50))$country %>% as.character())[-1]
+#
+# #test function
+# compile_partial_data(cntrs)
 
 
 
