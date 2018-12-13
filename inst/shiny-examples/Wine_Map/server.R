@@ -1,9 +1,7 @@
 library("shiny")
 library("leaflet")
 library("data.table")
-library("purrr")
-library("geonames")
-library("tidyverse")
+library("ggplot2")
 library("ptdsProjectG3")
 library("kableExtra")
 
@@ -28,14 +26,15 @@ server <- function(input, output, session) {
 
   grouped.labels <- list(labels, wine.label, number.label)
 
-  unique.countries <- unique(ptdsProjectG3::winemag$country)
-  unique.varieties <- unique(ptdsProjectG3::winemag$variety)
+  unique.countries <- unique(winemag$country)
+  unique.varieties <- unique(winemag$variety)
 
   # Creating colours for the graph
   # Based on avg quality
   bins <- c()
   for (i in 1:5) {
-    bins[i] <- quantile(countries@data$quality$avg.quality, na.rm = T, probs = 0.2*i)
+    bins[i] <- quantile(countries@data$quality$avg.quality, na.rm = T,
+                        probs = 0.2*i)
   }
   bins.avg <- c(80,round(bins,1),93)
   pal.avg <- colorBin("YlOrRd", domain = countries$df,
@@ -59,22 +58,22 @@ server <- function(input, output, session) {
 
   output$PriceQuality <- renderPlot({
     if(input$click.country %in% unique.countries) {
-      data %>%
-        filter(is.null(input$variety) | variety %in% input$variety,
+      winemag %>%
+        dplyr::filter(is.null(input$variety) | variety %in% input$variety,
                country == input$click.country) %>%
-        ggplot(aes(points, log(price))) +
-        geom_point(col = "navyblue", alpha = 0.5) +
-        geom_smooth(method = "gam") +
-        theme_bw() +
-        labs(y = "Price (log)", x = "Quality")
+        ggplot2::ggplot(ggplot2::aes(points, log(price))) +
+        ggplot2::geom_point(col = "navyblue", alpha = 0.5) +
+        ggplot2::geom_smooth(method = "gam") +
+        ggplot2::theme_bw() +
+        ggplot2::labs(y = "Price (log)", x = "Quality")
     } else {
-      data %>%
-        filter(is.null(input$variety) | variety %in% input$variety) %>%
-        ggplot(aes(points, log(price))) +
-        geom_point(col = "navyblue", alpha = 0.5) +
-        geom_smooth(method = "gam") +
-        theme_bw() +
-        labs(y = "Price (log)", x = "Quality")
+      winemag %>%
+        dplyr::filter(is.null(input$variety) | variety %in% input$variety) %>%
+        ggplot2::ggplot(ggplot2::aes(points, log(price))) +
+        ggplot2::geom_point(col = "navyblue", alpha = 0.5) +
+        ggplot2::geom_smooth(method = "gam") +
+        ggplot2::theme_bw() +
+        ggplot2::labs(y = "Price (log)", x = "Quality")
     }
   })
 
@@ -127,14 +126,14 @@ server <- function(input, output, session) {
 
   output$winetable <- DT::renderDataTable({
 
-    cleantable <- data[,c("title","points", "price" ,"country",
+    cleantable <- winemag[,c("title","points", "price" ,"country",
                           "province", "variety", "winery")] %>%
-      filter(is.na(points) == FALSE,
+      dplyr::filter(is.na(points) == FALSE,
              is.na(price) == FALSE,
              is.na(title) == FALSE)  %>%
-      rename('quality' = `points`) %>%
-      arrange(desc(quality)) %>%
-      filter(is.null(input$country) | country %in% input$country,
+      dplyr::rename('quality' = `points`) %>%
+      dplyr::arrange(desc(quality)) %>%
+      dplyr::filter(is.null(input$country) | country %in% input$country,
              is.null(input$province) | province %in% input$province,
              is.null(input$table.variety) | variety %in% input$table.variety,
              price >= min(input$pricerange),
@@ -145,9 +144,12 @@ server <- function(input, output, session) {
 
   output$best_wine <- function(){
        get_wine(Country=input$click.country,
-               Variety = input$variety,
+                Variety = input$variety,
                 Data=winemag,
-                N=5) %>% select(title) %>% kable(col.names=c(" ")) %>%
-                    kable_styling(bootstrap_options = "striped", font_size=12)
+                Criteria = "quality",
+                N=5) %>%
+      dplyr::select(title) %>%
+      kableExtra::kable(col.names=c(" ")) %>%
+      kableExtra::kable_styling(bootstrap_options = "striped", font_size=10)
   }
 }

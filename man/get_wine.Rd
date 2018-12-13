@@ -4,8 +4,8 @@
 \alias{get_wine}
 \title{Retrieving the best wine in the World}
 \usage{
-get_wine(Data, Country = NULL, Price = NULL, Variety = NULL,
-  Province = NULL, N = 10, Criteria = NULL)
+get_wine(Data = winemag, Country = NULL, Price = NULL,
+  Variety = NULL, Province = NULL, N = 10, Criteria = NULL)
 }
 \arguments{
 \item{Data}{A \code{dataframe} This is the dataframe that is used to retrieve
@@ -39,8 +39,8 @@ This function will allow you to retrieve from the wine review
 data, the best wine
 }
 \examples{
-data = data("winemag")
-get_wine(data, Country = "Italy")
+get_wine())
+get_wine(Country = "Italy")
 }
 \author{
 Vanessa Armistead

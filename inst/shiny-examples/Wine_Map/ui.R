@@ -1,3 +1,9 @@
+library("shiny")
+library("leaflet")
+library("ptdsProjectG3")
+library("data.table")
+
+
 # Define UI for application
 ui <- fluidPage(
   navbarPage("Wine Quality", id="nav",
@@ -75,13 +81,13 @@ ui <- fluidPage(
                         column(3,
                                selectInput("table.variety", "Varieties",
                                            c("All variaties"="",
-                                             sort(unique.varieties)),
+                                             sort(unique(winemag$variety))),
                                            multiple=TRUE)
                         ),
                         column(3,
                                selectInput("country", "Countries",
                                            c("All countries"="",
-                                             sort(unique.countries)),
+                                             sort(unique(winemag$country))),
                                            multiple=TRUE)
                         )
                       ),
