@@ -62,8 +62,8 @@ ui <- fluidPage(
 
 
                           tags$div(id="cite",
-                                   'Data compiled from ', tags$em('WineEnthusiast'),
-                                   ' on November 22nd, 2017.'
+                                   "Data compiled from ", tags$em('WineEnthusiast'),
+                                   "."
                           )
                       )
              ),
@@ -71,15 +71,6 @@ ui <- fluidPage(
 
              tabPanel("Data explorer",
 
-                      fluidRow(
-
-                        column(3,
-                               selectInput("country", "Countries",
-                                           c("All countries"="",
-                                             sort(unique(winemag$country))),
-                                           multiple=TRUE)
-                        )
-                      ),
                       fluidRow(
                         column(width = 10,
                                sliderInput("pricerange", "Price range",

@@ -139,8 +139,7 @@ server <- function(input, output, session) {
              is.na(price) == FALSE,
              is.na(title) == FALSE)  %>%
       dplyr::arrange(desc(quality)) %>%
-      dplyr::filter(is.null(input$country) | country %in% input$country,
-             price >= min(input$pricerange),
+      dplyr::filter(price >= min(input$pricerange),
              price <= max(input$pricerange))
 
     DT::datatable(cleantable, escape = FALSE)
