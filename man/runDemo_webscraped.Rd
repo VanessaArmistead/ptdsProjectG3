@@ -2,20 +2,11 @@
 % Please edit documentation in R/runDemo.R
 \name{runDemo_webscraped}
 \alias{runDemo_webscraped}
-\title{Run Shiny app}
+\title{Run Updated Shiny app}
 \usage{
 runDemo_webscraped()
 }
 \description{
 This function allows for launching the Shiny app when the
-package is loaded.
-}
-\author{
-Vanessa Armistead
-
-Bart Roes
-
-Luisa Pricken
-
-Ameni Rouatbi
+package is loaded, using data that is freshly webscraped from Winemag.com
 }

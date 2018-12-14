@@ -35,19 +35,10 @@ A \code{tibble} displaying the top N wines according to the specified
 criterion.
 }
 \description{
-This function will allow you to retrieve from the wine review
-data, the best wine
+This function will allow you to retrieve the best wines
+according to WineEnthusiast's review (Winemag.com), given your preferences
 }
 \examples{
 get_wine())
 get_wine(Country = "Italy")
-}
-\author{
-Vanessa Armistead
-
-Bart Roes
-
-Luisa Pricken
-
-Ameni Rouatbi
 }

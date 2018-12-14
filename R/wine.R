@@ -1,7 +1,7 @@
 #' @title Retrieving the best wine in the World
 #'
-#' @description This function will allow you to retrieve from the wine review
-#' data, the best wine
+#' @description This function will allow you to retrieve the best wines
+#' according to WineEnthusiast's review (Winemag.com), given your preferences
 #' @param Data A \code{dataframe} This is the dataframe that is used to retrieve
 #' the wines. It should be the data: winemag_data_130k_v2.
 #' @param Country A \code{character} This is the name of the country/countries
@@ -19,10 +19,6 @@
 #' "price & quality", "ascending price & quality" or "quality/price".
 #' @return A \code{tibble} displaying the top N wines according to the specified
 #' criterion.
-#' @author Vanessa Armistead
-#' @author Bart Roes
-#' @author Luisa Pricken
-#' @author Ameni Rouatbi
 #' @importFrom magrittr %>%
 #' @export
 #' @examples

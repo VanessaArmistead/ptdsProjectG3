@@ -7,15 +7,6 @@
 runDemo_complete()
 }
 \description{
-This function allows for launching the Shiny app when the
-package is loaded.
-}
-\author{
-Vanessa Armistead
-
-Bart Roes
-
-Luisa Pricken
-
-Ameni Rouatbi
+This function allows you to launch the Shiny app when the
+package is loaded, making use of the supplied winemag dataset
 }
