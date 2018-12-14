@@ -143,7 +143,7 @@ server <- function(input, output, session) {
   })
 
   output$best_wine <- function(){
-       get_wine(Country=input$click.country,
+      ptdsProjectG3::get_wine(Country=input$click.country,
                 Variety = input$variety,
                 Data=winemag,
                 Criteria = "quality",

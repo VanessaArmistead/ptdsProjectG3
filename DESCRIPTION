@@ -12,8 +12,8 @@ Authors@R: c(
     )
 Maintainer: The package maintainer <bart.roes@unil.ch>
 Description: This package allows you to retrieve the best wine accross the 
-    World. The data used is from the website WineEnthusiast.com (downloaded
-    from Kaggle).
+    World. The data used is from the website www.winemag.com (the winemag data 
+    is downloaded from Kaggle).
 License: GNU AFFERO GENERAL PUBLIC LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -22,5 +22,10 @@ Imports:
     tidyverse (>= 1.2.1),
     geojsonio (>= 0.6.0),
     dplyr (>= 0.7.6),
-    magrittr (>= 1.5)
+    magrittr (>= 1.5),
+    kableExtra (>= 0.9.0),
+    leaflet (>= 2.0.2),
+    data.table (>= 1.11.6),
+    ggplot2 (>= 3.0.0),
+    shiny (>= 1.2.0)
 RoxygenNote: 6.1.1
