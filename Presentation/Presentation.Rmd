@@ -1,0 +1,86 @@
+---
+title: "Wine Map"
+subtitle: ""
+author: "Armistead, Vanessa; Pricken, Luisa; Roes, Bart; Rouatbi Ameni"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: ioslides_presentation
+---
+
+
+```{r setup, warning=FALSE, message=FALSE, include=FALSE}
+
+```
+
+# Introduction
+
+## {.flexbox .vcenter}
+
+<div class="centered">
+Our main goal was to create an <span style="font-weight:bold">interactive map
+</span> of wine reviews all over the world, that allows the user to easily find 
+information about different wines and compare price and quality. 
+</div>
+
+
+## Project Design
+
+  * Data preparation
+  * Build a package 
+    * R functions
+    * Use Shiny app to create the interactive map highlighting the countries
+    that produce wine and coloring them according to the average wine quality
+    in each country
+    * Include in the dashboard interactive graphs and filters that allows to 
+    search information about different wines
+
+
+# Data Description 
+
+## Dataset used
+<small style="font-size:.8em">
+  
+<span style="font-weight:bold">WineEnthusiast review data (2017)</span> <br />
+<span style="font-size:.7em">retrieved from:
+[Kaggle](https://www.kaggle.com/zynicide/wine-reviews/)</span>
+
+  * Wine reviews
+  * 129971 observations
+  * 14 variables 
+  
+<br />
+<br />   
+<span style="font-weight:bold">SpatialPolygonsDataFrame</span>
+
+  * Coordinates of country boarders. 
+
+
+</small>
+
+
+# Functions
+
+## Functions 
+<small style="font-size:.8em">
+ 
+**get_wine()**: Retrieves the best wine from the wine review data
+
+
+</small>
+
+# Interactive map <br /> (Shiny app)
+
+
+## Dashboard {.flexbox .vcenter}
+
+<div class="centered">
+  
+
+
+</div>
+
+# Project Limitations
+
+## {.flexbox .vcenter}
+  <span style="font-weight:bold"> </span> 
+
+# Thank you ! 
