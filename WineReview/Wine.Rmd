@@ -21,50 +21,47 @@ library("tidyverse")
 
 ## Introduction 
 We decided to work on a wine data review that was available on kaggle. This 
-dataset contains information that can be found on the website
-"Wine Enthousiast". We created an interactive map that is easy to navigate
-through the different countries of the World. Indeed, we did not find any app or 
-website that had a clear review of the wines throughout the World. With our map, 
-one is able to see the average quality of the wine of each country, the most
-common type of wine and the amount of wines that was review from each country.
-Moreover, one can observe on the right side of the dashboard the "Wine data
-explorer". One can change the variety of the wine and/or the country to see the 
-relation between quality and price for the variety/varieties for the country/
-countries. There is also an option on the dashboard to explore the data of wine
-review. This allows you to search for a specific wine and receive all of the
-important information such as the price or the winery. One can also vary the 
+dataset contains information that can be found on the website "Wine Enthousiast". 
+We created an interactive map that is easy to navigate through the different 
+countries in the World. Indeed, we did not find any app or website that had a 
+clear review of the wines throughout the World. With our map, one is able to see
+the average quality, the most common type and the amount of wine that was review 
+for each country.
+Moreover, one can observe on the right side of the dashboard, the "Wine data
+explorer". There, you can change the variety of the wine as well as the country, 
+to see the relation between quality and price for the variety/varieties for the 
+country/countries. There is also an option on the dashboard to explore the data 
+of wine review. This allows you to search for a specific wine and access all 
+important information, such as the price or the winery. One can also vary the 
 price range in order to find wines specific to everyone's willingness to pay. 
 
 ## Data Cleaning
 
 #### Wine Review Dataset
-The original dataset from kaggle contains 14 variables including: 
-- X: this integer variable indicates the observation number
-- Country: this variable shows from which country the wine comes from. It is 
-of type character 
-- Description: this variable of type character gives us information about the 
-wine
-- Designation: it indicates the vineyard of the winery. It is of type character
-- Points: this interger variable contains the number of points that was given 
-to the specific wine. The scale is between 1 and 100 where 100 indicates a good
-wine
-- Price: it indicates the cost of the different bottles of wine which is in 
-US$. It is a numerical variable
-- Province: this character variable shows from which province/state the wine
-is from
-- Region 1: it indicates the area of where the wine is from. It is of type
-character
-- Region 2: this character variables adds information about the region of the
-wine
-- Taster Name: character variable indicating the name of the taster of the wine
-that posted the review on the website Wine Enthousiast
-- Taster Twitter Handle: this character variables includes information about 
-the Twitter account of the taster of the wine
-- Title: it is a character variable that contains information about the wine 
-such as the type of wine and the year of the wine
-- Variety: this character variable indicates the grapes used for the wine for
-instance "Pinot Gris"
-- Winery: it is a character variable indicating which winery produced the wine
+The original dataset was retrieved from kaggle containing the following 14 
+variables: 
+- X: Integer variable, indicates the observation number.
+- Country: Character variable, shows from which country the wine comes from.   
+- Description: Character variable, gives information about the wine.
+- Designation: Character variable, indicates the vineyard of the winery. 
+- Points: Integer variable, contains the number of points that was given 
+to a specific wine. It varies from 1 to 100 where 100 indicates the best 
+possible wine and 1 the worst one.
+- Price: Numerical variable, indicates the price (USD) of the bottle of wine.
+- Province: Character variable, shows from which province/state the wine comes 
+from.
+- Region 1: Character variable, indicates the area of where the wine is from. 
+- Region 2: Character variable, indicates more specific information about the 
+region were the grapes grow.
+- Taster Name: Character variable, indicates the name of the taster of the wine
+that posted the review on the website Wine Enthousiast.
+- Taster Twitter Handle: Character variable, includes information about 
+the Twitter account of the wine taster.
+- Title: Character variable, contains information about the wine such as its 
+name, type and year.
+- Variety: Character variable, indicates the type of grapes used for the wine 
+( e.g."Pinot Gris"). 
+- Winery: Character variable, indicates the winery.
 
 This dataset contains 129971 observations.
 
@@ -97,11 +94,11 @@ winemag <- winemag[complete.cases(winemag[,10]),]
 winemag[which(winemag$country == "US"),]$country = "United States of America"
 winemag[which(winemag$country == "England"),]$country = "United Kingdom"
 ```
-This new database thus contains 12 variables and 101400 observations.
+Thus, this new database contains 12 variables and 101400 observations.
 
-We then changed the format of the database into a RDA file so that people
+Lastly, we changed the format of the database into a RDA file so that people
 could easily retrieve it when using our package. 
-```{r RDA, eval=FALSE}
+```{r RDA, eval=FALSE, echo = FALSE}
 usethis::use_data(winemag, overwrite = TRUE)
 ```
 
@@ -109,32 +106,33 @@ usethis::use_data(winemag, overwrite = TRUE)
 #### Countries Dataset
 
 In order to get information about the countries' coordinates in the World,
-we used the geocountries function from the Geodata data package. This allowed 
-us to create our World Map. 
+we used the *geocountries* function from the *Geodata data* package. This
+allowed us to create our World Map. 
 
-```{r countries, eval=FALSE}
+```{r countries, eval=FALSE, echo = FALSE}
 # Data from Geodata package
-countries <- geojson_read("/Users/Vanessa/Desktop/countries.geojson", what = "sp")
+countries <- geojson_read("/Users/Vanessa/Desktop/countries.geojson",
+                          what = "sp")
 ```
 
 
 #### Countries and Wine reviews databases 
 In this part, we first needed to create a variable containing the value of the 
-average points regarding the quality of the wines of the different countries. We
-then joined it to the its respective countries in the database "countries".
-After that, we wanted to know the number of unique countries and varieties in
-our dataset. Moreover, we created new labels containing the most popular wine
+average points, regarding the quality of the wines from the different countries. 
+We then joined it to its respective countries in the database "countries".
+Following that, we wanted to know the number of unique countries and varieties in
+our dataset. Finally, we created new labels containing the most popular wine
 and the total number of wines for each country. The results are displayed in the
-map with different colors: the darker, the better
+map with different colors, the darkest colors can either indicate the country 
+with the highest average or the highest number of wines reviewed in that country,
+depending on the label chosen in the shiny app. 
 
-```{r, warning=FALSE, include=FALSE}
-# Load the necessary data
+```{r, warning=FALSE, echo = FALSE, include=FALSE}
+# Load the data
 load("../data/winemag.rda")
 data <- winemag
 load("../data/countries.rda")
-```
 
-```{r, warning=FALSE, eval=FALSE, include=FALSE}
 # Calculate average wine quality per country
 avg.quality <- data %>%
   group_by(country) %>%
@@ -153,8 +151,9 @@ df <- df %>% left_join(avg.quality, by = c("country" = "country"))
 # Find the number of unique countries/varieties that are present in the wine data
 unique.countries <- unique(data$country)
 unique.varieties <- unique(data$variety)
+```
 
-
+```{r, warning=FALSE, eval=FALSE, echo = FALSE, include=FALSE}
 # Create a label based on the most popular wine
 common_wines <- data %>%
   group_by(country, variety) %>%
@@ -183,7 +182,7 @@ df <- df %>% left_join(n.wines, by = c("country" = "country"))
 countries@data$quality<- df
 
 
-# Creating colours for the graph
+# Create colours for the graph:
 
 # Based on average quality
 bins <- c()
@@ -217,10 +216,9 @@ usethis::use_data(countries, overwrite = TRUE)
 ```
 
 
-
 ## Example of our Wine Review World Map
 
-```{r connection}
+```{r connection, warning=FALSE, echo = FALSE}
 m <- leaflet(countries) %>%
   setView(0, 0, 2) %>%
   addProviderTiles("MapBox", options = providerTileOptions(
@@ -228,7 +226,7 @@ m <- leaflet(countries) %>%
     accessToken = Sys.getenv('pk.eyJ1IjoiYmFydGozaCIsImEiOiJjam81amF6ODcwODBqM3FvYTlrN2E3azlvIn0.PUtXU40gLYiECsGAMzeYiw')))
 ```
 
-```{r colors}
+```{r colors, warning=FALSE, echo = FALSE}
 df <- matrix(nrow = 255,ncol = 1, 0)
 df <- as.data.frame(df)
 
@@ -271,10 +269,11 @@ m %>% addPolygons(
             position = "bottomleft")
 ```
 
-This map shows us the average wine quality of each country in our database. The
-darker the color, the better the quality. One can assess the exact average by 
-moving the mouse on each different countries. For instance, the country with 
-the highest average quality wine is the UK with the average of 91.55 and the
-lowest is Ukraine with an average of 84.07. 
+This map shows us the average wine quality of each country in our database. As 
+explained above, the darker the color, the better the quality. 
+One can assess the exact average by moving the mouse on each different 
+countries. For instance, the country with the highest average quality wine is 
+the UK with the average of 91.55 and the lowest is Ukraine with an average of 
+84.07. 
 
 
