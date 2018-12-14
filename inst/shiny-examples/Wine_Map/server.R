@@ -82,7 +82,7 @@ server <- function(input, output, session) {
     leaflet(countries) %>%
       setView(0, 0, 2) %>%
       addProviderTiles("MapBox", options = providerTileOptions(
-        id = "mapbox.light",
+        id = "mapbox",
         accessToken = Sys.getenv('pk.eyJ1IjoiYmFydGozaCIsImEiOiJjam81amF6ODcwODBqM3FvYTlrN2E3azlvIn0.PUtXU40gLYiECsGAMzeYiw'))) %>%
       addPolygons(
         fillColor = pal[[match(input$label, c("Average quality",

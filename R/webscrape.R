@@ -1,14 +1,13 @@
-#Setup#####
-# library("robotstxt")
-#
-# paths_allowed(
-#   path = "/?s=&search_type=reviews&drink_type=wine&price=1-3000",
-#   domain = "https://www.winemag.com/"
-# )
+#' @title Get Pages
+#' @description This function retrieves the total number of pages from the
+#' WineEnthusiast webpage (www.winemag.com) for the specified country
+#' @param country \code{character}, the name of the country
+#' @return A \code{vector} containing a sequence ranging from 1 to the total
+#' number of pages
+#' @export
+#' @example
+#' get_pages("Canada")
 
-
-
-# get_pages
 get_pages <- function(country){
 
   stopifnot(exprs = {
@@ -34,7 +33,17 @@ get_pages <- function(country){
     seq(from = 1)
 }
 
-# get_prices
+#' @title Get Prices
+#' @description This function retrieves a list of prices for a specified
+#' country for a single webpage,
+#' corresponding to the wines from the WineEnthusiast website
+#' @param country \code{character}, the name of the country
+#' @param page \code{integer}, the webpage from which to retrieve the prices
+#' @return A \code{numeric vector} containing the prices from the wines on the
+#' specified webpage
+#' @export
+#' @example
+#' get_prices("Canada",1)
 
 get_prices <- function(country, page, validate = TRUE){
 
@@ -71,7 +80,15 @@ get_prices <- function(country, page, validate = TRUE){
 
 }
 
-# get_all_prices
+#' @title Get All Prices
+#' @description This function retrieves a list of prices for a specified
+#' country, corresponding to the wines from the WineEnthusiast webpage
+#' @param country \code{character}, the name of the country
+#' @return A \code{numeric vector} containing the prices from all wines from
+#' the specified country
+#' @export
+#' @example
+#' get_all_prices("Canada")
 
 get_all_prices <- function (country, delay = 1){
   stopifnot(exprs = {
@@ -89,7 +106,17 @@ get_all_prices <- function (country, delay = 1){
   }) %>% unlist() %>% as.numeric()
 }
 
-# get_quality
+#' @title Get Quality
+#' @description This function retrieves a list of qualities for a specified
+#' country for a single webpage,
+#' corresponding to the wines from the WineEnthusiast website
+#' @param country \code{character}, the name of the country
+#' @param page \code{integer}, the webpage from which to retrieve the qualities
+#' @return A \code{numeric vector} containing the qualities from the wines on the
+#' specified webpage
+#' @export
+#' @example
+#' get_quality("Canada",1)
 
 get_quality <- function(country, page, validate = TRUE){
 
@@ -130,7 +157,15 @@ get_quality <- function(country, page, validate = TRUE){
 
 }
 
-# get_all_qualities
+#' @title Get All Qualities
+#' @description This function retrieves a list of qualities for a specified
+#' country, corresponding to the wines from the WineEnthusiast webpage
+#' @param country \code{character}, the name of the country
+#' @return A \code{numeric vector} containing the qualities from all wines from
+#' the specified country
+#' @export
+#' @example
+#' get_all_qualities("Canada")
 
 get_all_qualities <- function (country, delay = 1){
   stopifnot(exprs = {
@@ -148,7 +183,17 @@ get_all_qualities <- function (country, delay = 1){
   }) %>% unlist() %>% as.numeric()
 }
 
-# get_titles
+#' @title Get Title
+#' @description This function retrieves a list of titles for a specified
+#' country for a single webpage,
+#' corresponding to the wines from the WineEnthusiast website
+#' @param country \code{character}, the name of the country
+#' @param page \code{integer}, the webpage from which to retrieve the titles
+#' @return A \code{character} containing the titles from the wines on the
+#' specified webpage
+#' @export
+#' @example
+#' get_title("Canada",1)
 
 get_title <- function(country, page, validate = TRUE){
 
@@ -183,7 +228,15 @@ get_title <- function(country, page, validate = TRUE){
 
 }
 
-# get_all_qualities
+#' @title Get All Titles
+#' @description This function retrieves a list of titles for a specified
+#' country, corresponding to the wines from the WineEnthusiast webpage
+#' @param country \code{character}, the name of the country
+#' @return A \code{character} containing the qualities from all wines from
+#' the specified country
+#' @export
+#' @example
+#' get_all_titles("Canada")
 
 get_all_titles <- function (country, delay = 1){
   stopifnot(exprs = {
@@ -202,9 +255,22 @@ get_all_titles <- function (country, delay = 1){
 }
 
 
-# compile_data
+#' @title Compile Wine Data
+#' @description This function creates a dataframe, containing the qualities,
+#' prices, titles and countries of the wines retrieved from Winemag.com,
+#' for a given country
+#' @param country \code{character}, the name of the country
+#' @return A \code{dataframe} containing the following variables:
+#' \describe{
+#'      \item{title}{Title of the wine}
+#'      \item{quality}{Quality of the wine}
+#'      \item{price}{Price of the wine}
+#'      \item{country}{Country of origin}
+#' }
+#' @export
+#' @example
+#' compile_data("Canada")
 
-# compile_country_data
 
 compile_data <- function(country){
 
@@ -217,7 +283,21 @@ compile_data <- function(country){
 
 }
 
-# compile_full_data
+#' @title Compile Complete Wine Data
+#' @description This function creates a dataframe, containing the qualities,
+#' prices, titles and countries of the wines retrieved from Winemag.com,
+#' for multiple countries
+#' @param country \code{character}, the name of the country
+#' @return A \code{dataframe} containing the following variables:
+#' \describe{
+#'      \item{title}{Title of the wine}
+#'      \item{quality}{Quality of the wine}
+#'      \item{price}{Price of the wine}
+#'      \item{country}{Country of origin}
+#' }
+#' @export
+#' @example
+#' compile_data(c("Canada", "Israel"))
 
 compile_full_data <- function(all.countries){
 
@@ -227,7 +307,22 @@ compile_full_data <- function(all.countries){
 
 }
 
-# compil_first_page
+#' @title Compile First Page of Wine Data
+#' @description This function creates a dataframe, containing the qualities,
+#' prices, titles and countries of the wines retrieved from the first page of the
+#' website - retrieved from Winemag.com - for a given country
+#' @param country \code{character}, the name of the country
+#' @return A \code{dataframe} containing the following variables:
+#' \describe{
+#'      \item{title}{Title of the wine}
+#'      \item{quality}{Quality of the wine}
+#'      \item{price}{Price of the wine}
+#'      \item{country}{Country of origin}
+#' }
+#' @export
+#' @example
+#' compile_first_page("Canada")
+
 compile_first_page <- function(country){
 
   country <- gsub(country, pattern = " ", replacement = "%20")
@@ -240,7 +335,21 @@ compile_first_page <- function(country){
 }
 
 
-# compile_partial_data
+#' @title Compile Partial Wine Data
+#' @description This function creates a dataframe, containing the qualities,
+#' prices, titles and countries of the wines retrieved from the first page of the
+#' website - retrieved from Winemag.com - for multiple countries
+#' @param country \code{character}, the name of the country
+#' @return A \code{dataframe} containing the following variables:
+#' \describe{
+#'      \item{title}{Title of the wine}
+#'      \item{quality}{Quality of the wine}
+#'      \item{price}{Price of the wine}
+#'      \item{country}{Country of origin}
+#' }
+#' @export
+#' @example
+#' compile_partial_data(c("Canada", "Israel"))
 
 compile_partial_data <- function(all.countries){
 
@@ -249,13 +358,6 @@ compile_partial_data <- function(all.countries){
   dplyr::bind_rows(lapply(X = all.countries, FUN = compile_first_page))
 
 }
-
-# #code to get the important countries:
-# cntrs <- ((ptdsProjectG3::winemag %>% dplyr::group_by(country)
-#   %>% dplyr::count() %>% dplyr::filter(n > 50))$country %>% as.character())[-1]
-#
-# #test function
-# compile_partial_data(cntrs)
 
 
 
