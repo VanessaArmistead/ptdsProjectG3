@@ -58,29 +58,44 @@ information about different wines and compare price and quality.
 
 
 # Functions
-
 ## Functions 
-<small style="font-size:.8em">
- 
-**get_wine()**: Retrieves the best wine from the wine review data
+<small style="font-size:.6em">
+**get_wine()**: Retrieves the best wine from the wine review data <br />
 
-
+ <center><img src="get_wine.png" width="600"></center>  <br />
+ </small>
+<small style="font-size:.6em">
+ <center><img src="get_wine_V&C.png" width="600"></center>
 </small>
+
+##
+<center><img src="get_wine_Q&P.png" width="600"></center> <br />
+<center><img src="get_wine_N.png" width="600"></center>
+
+## Web Scraping
+
+<center><img src="Compile_data.png" width="700"></center>
 
 # Interactive map <br /> (Shiny app)
 
 
-## Dashboard {.flexbox .vcenter}
+## Dashboard 
 
-<div class="centered">
   
+<center><img src="Map.png" width="800"></center> <br />
 
-
-</div>
 
 # Project Limitations
 
 ## {.flexbox .vcenter}
-  <span style="font-weight:bold"> </span> 
+  <small style="font-size:.8em">
+ 
+  * Limited number of reviews.
+  * Reviews are subjective.
+  * Cannot retrieve all informations from web scraping.
+  * Takes time when you retrieve the data from winemag (≈ 3 hours). 
+
+</small>
+ 
 
 # Thank you ! 
