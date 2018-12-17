@@ -98,4 +98,4 @@ information about different wines and compare price and quality.
 </small>
  
 
-# Thank you ! 
+# Thank you!
