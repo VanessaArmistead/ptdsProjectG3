@@ -1,6 +1,6 @@
 ---
 title: "Wine Map"
-subtitle: ""
+subtitle: "Group 3"
 author: "Armistead, Vanessa; Pricken, Luisa; Roes, Bart; Rouatbi Ameni"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: ioslides_presentation
