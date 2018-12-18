@@ -43,9 +43,9 @@ information about different wines and compare price and quality.
 <span style="font-size:.7em">retrieved from:
 [Kaggle](https://www.kaggle.com/zynicide/wine-reviews/)</span>
 
-  * Wine reviews
-  * 129971 observations
-  * 14 variables 
+  * Wine reviews                    
+  * 129971 observations    ==>    101400 observations
+  * 14 variables           ==>    12 variables
   
 <br />
 <br />   
